@@ -9,6 +9,10 @@ export class UsersApplicationService {
     return this.users;
   }
 
+  findById(id: string): UserResponseDTO {
+    return this.users.find((user) => user.id === id);
+  }
+
   create(user: User): UserResponseDTO {
     const userResponse = {
       id: user.getId().getId(),

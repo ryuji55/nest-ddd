@@ -1,5 +1,5 @@
 import { UsersApplicationService } from '../applicationServices/usersApplicationService';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { User } from '../entities/user';
 import { UserId } from '../valueObject/userId';
 import { UserName } from '../valueObject/userName';
@@ -14,6 +14,11 @@ export class UsersController {
   @Get()
   findAll(): UserResponseDTO[] {
     return this.usersApplicationService.findAll();
+  }
+
+  @Get(':id')
+  findById(@Param('id') id: string): UserResponseDTO {
+    return this.usersApplicationService.findById(id);
   }
 
   @Post()
