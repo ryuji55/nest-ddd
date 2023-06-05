@@ -1,10 +1,11 @@
 import { UsersApplicationService } from '../applicationServices/usersApplicationService';
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { User } from '../entities/user';
 import { UserId } from '../valueObject/userId';
 import { UserName } from '../valueObject/userName';
 import { CreateUserCommand } from '../commands/createUserCommand';
 import { UserResponseDTO } from '../dto/userResponseDTO';
+import { UpdateUserCommand } from '../commands/updateUserCommand';
 
 @Controller('users')
 export class UsersController {
@@ -27,5 +28,16 @@ export class UsersController {
     const userName = new UserName(command.name);
     const user = new User(userId, userName);
     return this.usersApplicationService.create(user);
+  }
+
+  @Patch(':id')
+  updateUser(
+    @Param('id') id: string,
+    @Body('name') name: string,
+  ): UserResponseDTO {
+    const userId = new UserId(id);
+    const newUserName = new UserName(name);
+    const command = new UpdateUserCommand(userId, newUserName);
+    return this.usersApplicationService.updateUser(command);
   }
 }
