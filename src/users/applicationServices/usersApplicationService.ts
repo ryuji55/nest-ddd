@@ -1,9 +1,11 @@
+import { UserResponse } from './../../../dist/users/dto/userResponse.d';
 import { Injectable } from '@nestjs/common';
 import { User } from '../entities/user';
 import { UserResponseDTO } from '../dto/userResponseDTO';
 import { UserId } from '../valueObject/userId';
 import { UserName } from '../valueObject/userName';
 import { UpdateUserCommand } from '../commands/updateUserCommand';
+import { DeleteUserCommand } from '../commands/deleteUserCommand';
 
 @Injectable()
 export class UsersApplicationService {
@@ -17,10 +19,7 @@ export class UsersApplicationService {
   }
 
   create(user: User): UserResponseDTO {
-    const userResponse = {
-      id: user.getId().getId(),
-      name: user.getName().getName(),
-    };
+    const userResponse = user.toDTO();
     this.users.push(userResponse);
     return userResponse;
   }
@@ -40,5 +39,9 @@ export class UsersApplicationService {
     updateUser.updateName(command.newUserName);
 
     return updateUser.toDTO();
+  }
+
+  deleteUser(command: DeleteUserCommand): void {
+    this.users = this.users.filter((user) => user.id !== command.id);
   }
 }
